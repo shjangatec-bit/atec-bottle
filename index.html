@@ -163,7 +163,6 @@ textarea,input,select{font:inherit;color:inherit}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:rgba(30,45,58,.92);color:#fff;
   font-size:13.5px;padding:10px 16px;border-radius:20px;opacity:0;transition:.3s;z-index:80;pointer-events:none;max-width:90vw;text-align:center}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
-@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 .loading{text-align:center;color:#7a6142;font-size:13px;padding:30px 0}
 .notes .err-box{background:rgba(255,248,240,.9);border-radius:8px;padding:14px;text-align:center;font-size:13px;color:#8a3f1d}
 </style>
@@ -286,7 +285,6 @@ textarea,input,select{font:inherit;color:inherit}
 
   // 띄우기 연출
   let timers=[],anims=[],ringT=null;
-  const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   function clearAll(){
     timers.forEach(clearTimeout);timers=[];clearInterval(ringT);ringT=null;
   }
@@ -296,7 +294,6 @@ textarea,input,select{font:inherit;color:inherit}
     M.classList.remove('on');$('#skip').classList.remove('hidden');
     const r=L.getBoundingClientRect(),vw=innerWidth,vh=innerHeight;
     S.classList.remove('hidden');S.classList.add('active');
-    if(reduce){sea.style.opacity=1;finish();return}
     const bw=D.offsetWidth,bh=D.offsetHeight;
     const P=(x,y,s)=>`translate(${(x-bw/2).toFixed(1)}px,${(y-bh/2).toFixed(1)}px) scale(${s})`;
     const cx=vw/2,startY=Math.min(r.top+r.height*0.45,vh*0.6),waterY=vh*0.74,horizonY=vh*0.51;
