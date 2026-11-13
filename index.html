@@ -107,19 +107,25 @@ textarea,input,select{font:inherit;color:inherit}
 .stat b{display:block;font-family:'Gowun Batang',serif;font-size:clamp(14px,4vw,17px);color:#4a3212}
 .notes{padding:0 33% 10px 34.5%;margin-top:calc(130px - 25.8%);position:relative}
 .empty{text-align:center;color:#7a6142;font-size:13px;padding:30px 0}
-.entry{margin:34px 0 30px;position:relative}
-.note{position:relative;padding:8px 6px 4px;border:14px solid transparent;
+.entry{margin:34px 0 30px;position:relative;filter:drop-shadow(0 4px 5px rgba(70,55,30,.18))}
+.note{position:relative;min-height:100px;padding:8px 6px 14px;border:14px solid transparent;
   border-image:url(img/paper_note.webp) 40 fill / 14px stretch;
-  transform:rotate(-1.2deg);filter:drop-shadow(0 4px 6px rgba(80,55,20,.18))}
+  transform:rotate(-1.2deg);
+  clip-path:polygon(-40px -50px,calc(100% + 40px) -50px,calc(100% + 40px) 0,100% 0,100% calc(100% - 60px),calc(100% - 61px) 100%,-40px 100%)}
+.note::after{content:"";position:absolute;right:-17px;bottom:-22px;width:72px;height:80px;
+  background:url(img/curl_note.webp) 0 0/100% 100% no-repeat}
 .note::before{content:"";position:absolute;left:50%;top:-44px;width:30px;height:66px;margin-left:-15px;
   background:url(img/clothespin.webp) center/contain no-repeat;filter:drop-shadow(1px 2px 1px rgba(60,40,10,.25))}
 .entry:nth-child(even) .note{transform:rotate(1deg)}
 .note .meta{display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:#8a6f4a;margin-bottom:6px;gap:6px;padding-top:6px}
 .tag{background:rgba(255,255,255,.6);border:1px solid #d7c19a;border-radius:10px;padding:1px 7px}
 .note p{font-family:'Gowun Batang',serif;font-size:14.5px;line-height:1.7;white-space:pre-wrap;word-break:keep-all}
-.reply{position:relative;margin:-2px 0 0 14%;padding:6px 6px 4px;border:14px solid transparent;
+.reply{position:relative;min-height:96px;margin:-2px 0 0 14%;padding:6px 6px 14px;border:14px solid transparent;
   border-image:url(img/paper_reply.webp) 40 fill / 14px stretch;
-  transform:rotate(1.4deg);filter:drop-shadow(0 4px 6px rgba(30,60,90,.18))}
+  transform:rotate(1.4deg);
+  clip-path:polygon(-40px -30px,calc(100% + 30px) -30px,calc(100% + 30px) 50px,100% 50px,100% calc(100% - 60px),calc(100% - 54px) 100%,-40px 100%)}
+.reply::before{content:"";position:absolute;right:-16px;bottom:-20px;width:72px;height:78px;
+  background:url(img/curl_reply.webp) 0 0/100% 100% no-repeat}
 .reply::after{content:"";position:absolute;right:-16px;top:-18px;width:40px;height:54px;
   background:url(img/seal.webp) center/contain no-repeat;filter:drop-shadow(1px 2px 1px rgba(20,40,70,.2))}
 .seal-space{float:right;width:20px;height:22px}
