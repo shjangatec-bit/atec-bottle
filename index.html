@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>유리병 편지</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#3b3226; --ink-soft:#6b5d4b; --sea:#2f6f9f; --sea-deep:#1f4f74;
+  --paper:#fbf6ea; --line:rgba(80,60,30,.18);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:'Gowun Dodum',sans-serif;color:var(--ink);background:#cfe3f3;-webkit-font-smoothing:antialiased}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+textarea,input,select{font:inherit;color:inherit}
+.hidden,[hidden]{display:none!important}
+
+/* top bar */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;gap:6px;
+  padding:10px 12px;background:rgba(255,253,247,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line)}
+.brand{font-family:'Gowun Batang',serif;font-weight:700;font-size:17px;margin-right:auto;white-space:nowrap}
+.brand small{font-family:'Gowun Dodum';font-weight:400;font-size:11px;color:#a0522d;margin-left:4px;
+  border:1px solid #e0b896;border-radius:10px;padding:1px 6px;vertical-align:2px}
+.nav{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav button{font-size:13px;padding:7px 10px;border-radius:16px;white-space:nowrap;color:var(--ink-soft)}
+.nav button.on{background:var(--sea);color:#fff}
+
+.view{min-height:100vh;padding-top:56px}
+@media (max-width:600px){
+  .topbar{flex-wrap:wrap;padding:8px 10px 6px;row-gap:6px}
+  .brand{font-size:15px}
+  .nav{width:100%}
+  .nav button{flex:1;padding:7px 4px;font-size:13px}
+  .view{padding-top:92px}
+  #write{padding-top:104px}
+  #find{padding-top:108px}
+  #admin{padding-top:104px}
+}
+
+/* ---------- write ---------- */
+#write{position:relative;background:url(img/desk_h.webp) center/cover no-repeat fixed;display:flex;align-items:center;justify-content:center;padding:76px 16px 28px}
+@media (orientation:portrait){#write{background-image:url(img/desk_v.webp);align-items:flex-end;background-attachment:scroll}}
+.letter{width:100%;max-width:520px;background:rgba(253,250,242,.93);border-radius:6px;padding:22px 20px 18px;
+  box-shadow:0 10px 30px rgba(90,60,20,.18),0 1px 0 rgba(255,255,255,.8) inset;
+  background-image:repeating-linear-gradient(transparent 0 33px,rgba(120,150,180,.16) 33px 34px);
+  transform-origin:50% 100%;transition:transform .7s cubic-bezier(.6,0,.4,1),opacity .7s}
+.letter h1{font-family:'Gowun Batang',serif;font-size:21px;margin-bottom:4px}
+.letter .sub{font-size:13px;color:var(--ink-soft);margin-bottom:14px;line-height:1.55}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.chip{font-size:13px;padding:6px 11px;border-radius:14px;border:1px solid #d6c7a8;background:#fffdf6;color:var(--ink-soft)}
+.chip.on{background:#e8f1f8;border-color:var(--sea);color:var(--sea-deep)}
+.letter textarea{width:100%;min-height:140px;resize:vertical;border:0;background:transparent;outline:none;
+  font-family:'Gowun Batang',serif;font-size:16px;line-height:34px;padding:0 2px}
+.count{text-align:right;font-size:12px;color:#9a8b74;margin-top:2px}
+.rules{margin:12px 0 14px;padding:10px 12px;border-left:3px solid #c9a36a;background:rgba(240,228,203,.55);
+  font-size:12.5px;line-height:1.6;color:#5c4d38;border-radius:0 6px 6px 0}
+.rules b{color:#7a4b1d}
+.btn-main{width:100%;padding:14px;border-radius:10px;background:var(--sea);color:#fff;font-size:16px;font-weight:700;
+  box-shadow:0 4px 12px rgba(47,111,159,.35);transition:background .2s}
+.btn-main:hover{background:var(--sea-deep)}
+.btn-main:disabled{background:#a9bfd0;box-shadow:none;cursor:not-allowed}
+.err{color:#b03a2e;font-size:12.5px;margin-top:8px;min-height:1em}
+
+/* ---------- send animation ---------- */
+#send{position:fixed;inset:0;z-index:60;background:url(img/sea.webp) center/cover no-repeat;overflow:hidden}
+#send::after{content:"";position:absolute;inset:auto 0 0 0;height:30%;background:linear-gradient(transparent,rgba(255,255,255,.15))}
+.bottle{position:absolute;left:50%;bottom:6%;width:min(26vw,120px);transform:translateX(-50%);opacity:0;z-index:2;
+  filter:drop-shadow(0 8px 10px rgba(20,60,90,.25))}
+.bottle img{width:100%;display:block}
+.bottle.in{animation:bottleIn 1s ease-out forwards}
+.bottle.go{animation:bottleGo 4.2s cubic-bezier(.35,.1,.3,1) forwards}
+.bottle .bob{animation:bob 1.6s ease-in-out infinite}
+@keyframes bottleIn{from{opacity:0;transform:translateX(-50%) translateY(40px) rotate(-8deg)}to{opacity:1;transform:translateX(-50%) translateY(0) rotate(0)}}
+@keyframes bottleGo{
+  0%{opacity:1;transform:translateX(-50%) translateY(0) scale(1) rotate(0)}
+  30%{transform:translateX(-46%) translateY(-14vh) scale(.62) rotate(70deg)}
+  100%{opacity:0;transform:translateX(-30%) translateY(-46vh) scale(.12) rotate(80deg)}}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-6px) rotate(4deg)}}
+.ripple{position:absolute;left:50%;bottom:7%;width:160px;height:26px;margin-left:-80px;border-radius:50%;
+  border:2px solid rgba(255,255,255,.7);opacity:0;z-index:1}
+.ripple.on{animation:ripple 1.4s ease-out 2}
+@keyframes ripple{from{opacity:.9;transform:scale(.3)}to{opacity:0;transform:scale(1.5)}}
+.send-msg{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(88vw,380px);z-index:3;
+  background:rgba(253,250,242,.95);border-radius:12px;padding:24px 22px;text-align:center;
+  box-shadow:0 12px 34px rgba(20,60,90,.25);opacity:0;pointer-events:none;transition:opacity .6s}
+.send-msg.on{opacity:1;pointer-events:auto}
+.send-msg h2{font-family:'Gowun Batang',serif;font-size:20px;margin-bottom:8px}
+.send-msg p{font-size:13.5px;color:var(--ink-soft);line-height:1.6}
+.bno{font-family:'Gowun Batang',serif;font-size:30px;font-weight:700;letter-spacing:2px;color:var(--sea-deep);margin:14px 0 4px}
+.row-btn{display:flex;gap:8px;margin-top:16px}
+.btn-sub{flex:1;padding:12px;border-radius:10px;border:1px solid #cdbf9f;background:#fffdf6;font-size:14px}
+.row-btn .btn-main{flex:1;padding:12px;font-size:14px}
+.skip{position:absolute;right:14px;bottom:14px;z-index:4;font-size:13px;color:#fff;background:rgba(0,40,70,.35);
+  padding:7px 12px;border-radius:14px}
+
+/* ---------- board ---------- */
+#board{background:url(img/sea.webp) center/cover fixed;padding-bottom:0}
+#board{position:relative}
+#board::before{content:"";position:fixed;inset:0;background:inherit;filter:blur(3px) brightness(1.05) saturate(.85);transform:scale(1.03);z-index:0}
+.board{position:relative;z-index:1;width:100%;max-width:520px;margin:0 auto;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 3%,#000 97%,transparent 100%);
+  mask-image:linear-gradient(90deg,transparent 0,#000 3%,#000 97%,transparent 100%);
+  background:url(img/board_mid.webp) 0 0/100% auto repeat-y}
+.board-top,.board-bot{display:block;width:100%;height:auto}
+.board-top-wrap{position:relative}
+.board-head{position:absolute;left:19%;right:15.5%;top:46%;text-align:center}
+.board-head h2{font-family:'Gowun Batang',serif;font-size:clamp(18px,5vw,24px);color:#5a3d1c;
+  text-shadow:0 1px 0 rgba(255,255,255,.6)}
+.board-head p{font-size:12px;color:#7a6142;margin-top:4px;line-height:1.5}
+.stats{display:flex;justify-content:center;gap:4px;margin-top:8px}
+.stat{flex:1;max-width:76px;background:rgba(255,251,240,.88);border:1px dashed #b89a6c;border-radius:6px;padding:4px 2px;font-size:clamp(10px,2.6vw,11.5px);color:#6b4f2a;line-height:1.3;white-space:nowrap}
+.stat b{display:block;font-family:'Gowun Batang',serif;font-size:clamp(14px,4vw,17px);color:#4a3212}
+.notes{padding:4% 15.5% 10px 19%;margin-top:-13%;position:relative}
+.empty{text-align:center;color:#7a6142;font-size:13px;padding:30px 0}
+.entry{margin:0 0 26px;position:relative}
+.note{position:relative;background:url(img/note.webp) center/100% 100% no-repeat;padding:19% 9% 9% 8%;
+  transform:rotate(-1.2deg);filter:drop-shadow(0 4px 6px rgba(80,55,20,.18))}
+.entry:nth-child(even) .note{transform:rotate(1deg)}
+.note .meta{display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:#8a6f4a;margin-bottom:6px;gap:6px}
+.tag{background:rgba(255,255,255,.6);border:1px solid #d7c19a;border-radius:10px;padding:1px 7px}
+.note p{font-family:'Gowun Batang',serif;font-size:14.5px;line-height:1.7;white-space:pre-wrap;word-break:keep-all}
+.reply{position:relative;margin:-6px 0 0 14%;background:url(img/reply.webp) center/100% 100% no-repeat;
+  padding:9% 14% 10% 8%;transform:rotate(1.4deg);filter:drop-shadow(0 4px 6px rgba(30,60,90,.18))}
+.reply .who{font-size:11.5px;color:#3f6f96;margin-bottom:4px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.reply p{font-family:'Gowun Batang',serif;font-size:14px;line-height:1.65;color:#2e4256;white-space:pre-wrap;word-break:keep-all}
+.badge{font-size:11px;padding:1px 7px;border-radius:9px;color:#fff;white-space:nowrap}
+.b-done{background:#4b8a5f}.b-plan{background:#2f6f9f}.b-no{background:#9a7b5c}.b-wait{background:#b08a3a}
+.board-foot{position:relative}
+.foot-note{position:absolute;left:14%;right:14%;bottom:5%;text-align:center;font-size:12px;line-height:1.55;color:#5b4528;background:rgba(255,250,238,.82);border-radius:10px;padding:8px 10px}
+
+/* ---------- find ---------- */
+#find{background:url(img/sea.webp) center/cover fixed;padding:80px 16px 40px}
+.panel{max-width:460px;margin:0 auto;background:rgba(253,250,242,.94);border-radius:12px;padding:22px 20px;
+  box-shadow:0 10px 30px rgba(20,60,90,.18)}
+.panel h2{font-family:'Gowun Batang',serif;font-size:20px;margin-bottom:6px}
+.panel .sub{font-size:13px;color:var(--ink-soft);line-height:1.55;margin-bottom:14px}
+.find-row{display:flex;gap:8px}
+.find-row input{flex:1;min-width:0;padding:12px;border:1px solid #cdbf9f;border-radius:10px;background:#fff;font-size:16px;letter-spacing:1px}
+.find-row .btn-main{width:auto;padding:12px 18px;font-size:15px}
+.find-hint{font-size:12px;color:#9a8b74;margin-top:8px}
+.find-result{margin-top:18px}
+.state{font-size:14px;line-height:1.6;padding:12px;border-radius:8px;background:#f4ede0;margin-bottom:14px}
+
+/* ---------- admin ---------- */
+#admin{background:#eef3f7;padding:76px 14px 40px}
+.admin{max-width:760px;margin:0 auto}
+.admin-head{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;margin-bottom:6px;flex-wrap:wrap}
+.admin h2{font-size:20px}
+.admin .warn{font-size:12.5px;color:#7a5a2a;background:#fff6e5;border:1px solid #f0d9a8;border-radius:8px;padding:9px 12px;margin:8px 0 14px;line-height:1.55}
+.tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.tabs button{font-size:13px;padding:6px 12px;border-radius:14px;background:#fff;border:1px solid #d5dee6}
+.tabs button.on{background:#1f4f74;color:#fff;border-color:#1f4f74}
+.card{background:#fff;border:1px solid #dde5ec;border-radius:10px;padding:14px;margin-bottom:12px}
+.card-top{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;color:#5d6d7a;margin-bottom:8px;flex-wrap:wrap}
+.card-top b{color:#1f2d38}
+.card .body{font-size:14.5px;line-height:1.65;white-space:pre-wrap;word-break:keep-all;background:#f7f9fb;border-radius:8px;padding:10px 12px}
+.card label{display:block;font-size:12.5px;color:#5d6d7a;margin:10px 0 4px}
+.card textarea{width:100%;min-height:72px;border:1px solid #cfd9e2;border-radius:8px;padding:9px;font-size:14px;line-height:1.55;resize:vertical}
+.card select{border:1px solid #cfd9e2;border-radius:8px;padding:7px;font-size:13.5px;background:#fff}
+.acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.acts button{font-size:13px;padding:8px 12px;border-radius:8px;border:1px solid #cfd9e2;background:#fff}
+.acts .a-post{background:#2f6f9f;border-color:#2f6f9f;color:#fff}
+.acts .a-priv{background:#fff;border-color:#2f6f9f;color:#2f6f9f}
+.acts .a-griev{border-color:#b0603a;color:#b0603a}
+.pill{font-size:11.5px;padding:2px 8px;border-radius:10px;background:#eef2f5;color:#4b5b68}
+.pill.p-pending{background:#fff1d6;color:#8a5a00}.pill.p-posted{background:#e1f0e6;color:#2f6b45}
+.pill.p-private{background:#e3eef8;color:#1f4f74}.pill.p-grievance{background:#f8e6dd;color:#8a3f1d}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:rgba(30,45,58,.92);color:#fff;
+  font-size:13.5px;padding:10px 16px;border-radius:20px;opacity:0;transition:.3s;z-index:80;pointer-events:none;max-width:90vw;text-align:center}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+.loading{text-align:center;color:#7a6142;font-size:13px;padding:30px 0}
+.notes .err-box{background:rgba(255,248,240,.9);border-radius:8px;padding:14px;text-align:center;font-size:13px;color:#8a3f1d}
+</style>
+
+<script src="config.js"></script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">유리병 편지</div>
+  <nav class="nav" id="nav">
+    <button data-v="write" class="on">편지 쓰기</button>
+    <button data-v="board">해변 게시판</button>
+    <button data-v="find">내 병 찾기</button>
+  </nav>
+</header>
+
+<section class="view" id="write">
+  <form class="letter" id="letter" novalidate>
+    <h1>회사에 하고 싶은 말이 있나요?</h1>
+    <p class="sub">말로 꺼내기 어려웠던 이야기, 유리병에 담아 보내 주세요.</p>
+    <textarea id="txt" maxlength="1000" placeholder="여기에 적어 주세요."></textarea>
+    <div class="count"><span id="cnt">0</span> / 1000</div>
+    <div class="rules">
+      <b>이름이나 계정 없이 접수됩니다.</b> 편지에는 내용과 날짜만 남습니다.<br>
+      담당자가 읽고 모두가 볼 만한 글은 <b>해변 게시판</b>에 답장과 함께 붙입니다.<br>
+      특정 개인을 지목한 글은 게시하지 않고 <b>고충처리 절차</b>로 안내합니다.
+    </div>
+    <button class="btn-main" id="sendBtn" type="submit" disabled>유리병에 담아 띄우기</button>
+    <div class="err" id="err"></div>
+  </form>
+</section>
+
+<div id="send" class="hidden" aria-live="polite">
+  <div class="ripple" id="ripple"></div>
+  <div class="bottle" id="bottle"><div class="bob"><img src="img/bottle.webp" alt="편지가 담긴 유리병"></div></div>
+  <div class="send-msg" id="sendMsg">
+    <h2>유리병이 바다로 떠났어요</h2>
+    <p>아래 병 번호를 적어 두세요.<br>이 번호로 처리 상태와 답장을 확인할 수 있습니다.</p>
+    <div class="bno" id="bno">----</div>
+    <p style="font-size:12px">병 번호는 다시 보여 드릴 수 없습니다.</p>
+    <div class="row-btn">
+      <button class="btn-sub" id="copyBno" type="button">번호 복사</button>
+      <button class="btn-main" id="toBoard" type="button">해변 게시판 보기</button>
+    </div>
+  </div>
+  <button class="skip" id="skip" type="button">건너뛰기</button>
+</div>
+
+<section class="view" id="board" hidden>
+  <div class="board">
+    <div class="board-top-wrap">
+      <img class="board-top" src="img/board_top.webp" alt="">
+      <div class="board-head">
+        <h2>해변 게시판</h2>
+        <p>해변에 닿은 편지와 회사의 답장입니다</p>
+        <div class="stats" id="stats"></div>
+      </div>
+    </div>
+    <div class="notes" id="notes"><div class="loading">불러오는 중…</div></div>
+    <div class="board-foot">
+      <img class="board-bot" src="img/board_bot.webp" alt="">
+      <div class="foot-note">해변에 닿지 않은 병은 담당자가 보낸 분께 따로 답장합니다.<br>'내 병 찾기'에서 확인하세요.</div>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="find" hidden>
+  <div class="panel">
+    <h2>내 병 찾기</h2>
+    <p class="sub">띄울 때 받은 병 번호를 넣으면 처리 상태와 답장을 볼 수 있습니다.</p>
+    <form class="find-row" id="findForm">
+      <input id="findNo" placeholder="예: K7M2-Q9XA" autocomplete="off" autocapitalize="characters" spellcheck="false">
+      <button class="btn-main" type="submit">찾기</button>
+    </form>
+    <div class="find-result" id="findResult"></div>
+  </div>
+</section>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  const $=s=>document.querySelector(s);
+  const api=window.bottleApi;
+  const RESULT={done:['반영 완료','b-done'],plan:['반영 예정','b-plan'],no:['반영 어려움','b-no']};
+  const STATUS={pending:'검토 중',posted:'게시',private:'개별 답장',grievance:'고충 이관'};
+  const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),2400)}
+
+  // 화면 전환
+  const views=['write','board','find'];
+  function show(v){
+    if(!views.includes(v))v='write';
+    views.forEach(x=>{document.getElementById(x).hidden=(x!==v)});
+    document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
+    if(v==='board')loadBoard();
+    window.scrollTo(0,0);
+    if(location.hash!=='#'+v)history.replaceState(null,'','#'+v);
+  }
+  document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>show(b.dataset.v));
+  window.addEventListener('hashchange',()=>show(location.hash.slice(1)));
+
+  // 편지 쓰기
+  const txt=$('#txt'),btn=$('#sendBtn');
+  txt.addEventListener('input',()=>{$('#cnt').textContent=txt.value.length;btn.disabled=txt.value.trim().length<5;$('#err').textContent=''});
+  $('#letter').addEventListener('submit',async e=>{
+    e.preventDefault();
+    const v=txt.value.trim();
+    if(v.length<5){$('#err').textContent='다섯 글자 이상 적어 주세요.';return}
+    btn.disabled=true;btn.textContent='유리병에 담는 중…';
+    try{
+      const code=await api.rpc('submit_bottle',{p_body:v});
+      launch(code);
+    }catch(err){
+      $('#err').textContent=err.message||'보내지 못했습니다. 잠시 후 다시 시도해 주세요.';
+      btn.disabled=false;
+    }finally{btn.textContent='유리병에 담아 띄우기'}
+  });
+
+  // 띄우기 연출
+  let timers=[];
+  function clearT(){timers.forEach(clearTimeout);timers=[]}
+  function launch(code){
+    const L=$('#letter');
+    L.style.transform='scale(.15,.04) translateY(200px)';L.style.opacity='0';
+    const S=$('#send'),B=$('#bottle'),R=$('#ripple'),M=$('#sendMsg');
+    $('#bno').textContent=code;
+    timers.push(setTimeout(()=>{S.classList.remove('hidden');B.className='bottle';M.classList.remove('on');R.classList.remove('on');void B.offsetWidth;B.classList.add('in')},650));
+    timers.push(setTimeout(()=>{B.classList.remove('in');B.classList.add('go');R.classList.add('on')},2000));
+    timers.push(setTimeout(finish,6000));
+  }
+  function finish(){clearT();const B=$('#bottle');B.className='bottle';B.style.opacity='0';$('#sendMsg').classList.add('on');$('#skip').classList.add('hidden')}
+  $('#skip').onclick=finish;
+  function closeSend(){
+    $('#send').classList.add('hidden');$('#skip').classList.remove('hidden');$('#bottle').style.opacity='';
+    const L=$('#letter');L.style.transition='none';L.style.transform='';L.style.opacity='';
+    txt.value='';$('#cnt').textContent='0';btn.disabled=true;
+    requestAnimationFrame(()=>L.style.transition='');
+  }
+  $('#toBoard').onclick=()=>{closeSend();show('board')};
+  $('#copyBno').onclick=async()=>{
+    try{await navigator.clipboard.writeText($('#bno').textContent);toast('병 번호를 복사했습니다')}
+    catch(e){toast('복사가 안 되면 번호를 직접 적어 두세요')}
+  };
+
+  // 게시판
+  function entryHTML(d){
+    const r=RESULT[d.result];
+    return `<div class="entry">
+      <div class="note"><div class="meta">${d.category?`<span class="tag">${esc(d.category)}</span>`:'<span></span>'}<span>${esc(d.created_on)}</span></div>
+        <p>${esc(d.body)}</p></div>
+      ${d.reply?`<div class="reply"><div class="who">회사 답장 ${r?`<span class="badge ${r[1]}">${r[0]}</span>`:''}</div><p>${esc(d.reply)}</p></div>`:''}
+    </div>`;
+  }
+  async function loadBoard(){
+    const notes=$('#notes');
+    notes.innerHTML='<div class="loading">불러오는 중…</div>';
+    try{
+      const [list,st]=await Promise.all([api.rpc('get_board'),api.rpc('get_stats')]);
+      $('#stats').innerHTML=`<div class="stat"><b>${st.sent}</b>띄운 병</div><div class="stat"><b>${st.posted}</b>해변 도착</div><div class="stat"><b>${st.private}</b>개별 전달</div><div class="stat"><b>${st.pending}</b>검토 중</div>`;
+      notes.innerHTML=list.length?list.map(entryHTML).join(''):'<div class="empty">아직 해변에 닿은 편지가 없습니다.</div>';
+    }catch(err){
+      notes.innerHTML=`<div class="err-box">게시판을 불러오지 못했습니다.<br>${esc(err.message)}</div>`;
+    }
+  }
+
+  // 내 병 찾기
+  function normCode(q){
+    q=q.toUpperCase().replace(/[^A-Z0-9]/g,'');
+    return q.length===8?q.slice(0,4)+'-'+q.slice(4):q;
+  }
+  $('#findForm').addEventListener('submit',async e=>{
+    e.preventDefault();
+    const out=$('#findResult'),code=normCode($('#findNo').value);
+    if(code.length!==9){out.innerHTML='<div class="state">병 번호 8자리를 넣어 주세요. (예: K7M2-Q9XA)</div>';return}
+    out.innerHTML='<div class="loading">찾는 중…</div>';
+    try{
+      const rows=await api.rpc('find_bottle',{p_code:code});
+      const d=rows&&rows[0];
+      if(!d){out.innerHTML='<div class="state">그 번호의 병을 찾지 못했습니다. 번호를 다시 확인해 주세요.</div>';return}
+      const msg={
+        pending:'아직 담당자가 읽고 있습니다. 답장이 오면 여기에 표시됩니다.',
+        posted:'해변 게시판에 답장과 함께 게시되었습니다.',
+        private:'게시하지 않고 보내신 분께만 답장을 드렸습니다.',
+        grievance:'고충처리위원에게 전달되었습니다. 고충처리 절차에 따라 안내드립니다.'
+      }[d.status];
+      out.innerHTML=`<div class="state"><b>${esc(code)}</b> · ${STATUS[d.status]}<br>${msg}</div>`+entryHTML(d);
+    }catch(err){out.innerHTML=`<div class="state">${esc(err.message)}</div>`}
+  });
+
+  show(location.hash.slice(1)||'write');
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>유리병 편지 · 담당자</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Gowun Dodum',sans-serif;background:#eef3f7;color:#1f2d38;-webkit-font-smoothing:antialiased}
+button{font:inherit;cursor:pointer}
+input,textarea,select{font:inherit;color:inherit}
+[hidden]{display:none!important}
+.top{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid #dde5ec;padding:12px 16px;display:flex;align-items:center;gap:10px}
+.top h1{font-size:16px;margin-right:auto;white-space:nowrap}
+@media (max-width:480px){.top .me{display:none}}
+.top .me{font-size:12.5px;color:#5d6d7a}
+.top button{font-size:13px;padding:6px 12px;border-radius:8px;border:1px solid #cfd9e2;background:#fff}
+.wrap{max-width:780px;margin:0 auto;padding:16px 14px 40px}
+.login{max-width:360px;margin:60px auto;background:#fff;border:1px solid #dde5ec;border-radius:12px;padding:24px}
+.login h2{font-size:19px;margin-bottom:4px}
+.login p{font-size:13px;color:#5d6d7a;margin-bottom:16px}
+.login label{display:block;font-size:12.5px;color:#5d6d7a;margin:10px 0 4px}
+.login input{width:100%;padding:11px;border:1px solid #cfd9e2;border-radius:8px;font-size:15px}
+.btn{width:100%;margin-top:16px;padding:12px;border:0;border-radius:8px;background:#2f6f9f;color:#fff;font-size:15px;font-weight:700}
+.btn:disabled{background:#a9bfd0}
+.msg{font-size:13px;color:#b03a2e;margin-top:10px;min-height:1em}
+.summary{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.sum{flex:1;min-width:70px;background:#fff;border:1px solid #dde5ec;border-radius:10px;padding:10px 12px;font-size:12.5px;color:#5d6d7a}
+.sum b{display:block;font-size:20px;color:#1f2d38}
+.guide{font-size:12.5px;color:#5c4a28;background:#fff8e8;border:1px solid #f0dcae;border-radius:8px;padding:10px 12px;line-height:1.6;margin-bottom:12px}
+.tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.tabs button{font-size:13px;padding:6px 12px;border-radius:14px;background:#fff;border:1px solid #d5dee6}
+.tabs button.on{background:#1f4f74;color:#fff;border-color:#1f4f74}
+.card{background:#fff;border:1px solid #dde5ec;border-radius:10px;padding:14px;margin-bottom:12px}
+.card-top{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;color:#5d6d7a;margin-bottom:8px;flex-wrap:wrap;align-items:center}
+.card-top b{color:#1f2d38}
+.body{font-size:14.5px;line-height:1.7;white-space:pre-wrap;word-break:keep-all;background:#f7f9fb;border-radius:8px;padding:10px 12px}
+.card label{display:block;font-size:12.5px;color:#5d6d7a;margin:10px 0 4px}
+.card textarea{width:100%;min-height:80px;border:1px solid #cfd9e2;border-radius:8px;padding:9px;font-size:14px;line-height:1.55;resize:vertical}
+.selects{display:flex;gap:10px;flex-wrap:wrap}
+.selects>div{flex:1;min-width:150px}
+.card select{width:100%;border:1px solid #cfd9e2;border-radius:8px;padding:8px;font-size:13.5px;background:#fff}
+.acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.acts button{font-size:13px;padding:8px 12px;border-radius:8px;border:1px solid #cfd9e2;background:#fff}
+.acts .a-post{background:#2f6f9f;border-color:#2f6f9f;color:#fff}
+.acts .a-priv{border-color:#2f6f9f;color:#2f6f9f}
+.acts .a-griev{border-color:#b0603a;color:#b0603a}
+.acts .a-back{color:#5d6d7a}
+.acts button:disabled{opacity:.5}
+.pill{font-size:11.5px;padding:2px 8px;border-radius:10px}
+.p-pending{background:#fff1d6;color:#8a5a00}.p-posted{background:#e1f0e6;color:#2f6b45}
+.p-private{background:#e3eef8;color:#1f4f74}.p-grievance{background:#f8e6dd;color:#8a3f1d}
+.empty{background:#fff;border:1px solid #dde5ec;border-radius:10px;padding:24px;text-align:center;color:#5d6d7a;font-size:14px}
+.confirm{margin-top:10px;padding:10px 12px;border-radius:8px;background:#fdf1ec;border:1px solid #efcbb9;font-size:13px;color:#7a3a1c;line-height:1.55}
+.confirm .acts{margin-top:8px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:rgba(30,45,58,.92);color:#fff;
+  font-size:13.5px;padding:10px 16px;border-radius:20px;opacity:0;transition:.3s;z-index:20;pointer-events:none;max-width:90vw;text-align:center}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+<script src="config.js"></script>
+</head>
+<body>
+
+<div class="top">
+  <h1>유리병 편지 · 담당자</h1>
+  <span class="me" id="me"></span>
+  <button id="reload" hidden>새로고침</button>
+  <button id="logout" hidden>로그아웃</button>
+</div>
+
+<form class="login" id="loginBox">
+  <h2>담당자 로그인</h2>
+  <p>등록된 담당자 계정으로만 들어올 수 있습니다.</p>
+  <label for="email">이메일</label>
+  <input id="email" type="email" autocomplete="username" required>
+  <label for="pw">비밀번호</label>
+  <input id="pw" type="password" autocomplete="current-password" required>
+  <button class="btn" id="loginBtn" type="submit">로그인</button>
+  <div class="msg" id="loginMsg"></div>
+</form>
+
+<div class="wrap" id="app" hidden>
+  <div class="summary" id="summary"></div>
+  <div class="guide">
+    <b>게시</b> 해변 게시판에 원문과 답장을 함께 공개 · <b>개별 답장</b> 공개하지 않고 병 번호로만 답장 · <b>고충 이관</b> 특정인 지목 등은 고충처리위원에게 전달<br>
+    게시할 때는 원문에 특정인을 알아볼 수 있는 내용이 없는지 다시 확인해 주세요. 편지 원문은 수정할 수 없습니다.
+  </div>
+  <div class="tabs" id="tabs">
+    <button data-f="pending" class="on">검토 대기</button>
+    <button data-f="done">처리 완료</button>
+    <button data-f="all">전체</button>
+  </div>
+  <div id="list"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  const $=s=>document.querySelector(s);
+  const api=window.bottleApi, C=window.BOTTLE_CONFIG;
+  const CATS=['근무환경','복지','업무 개선','질문','기타'];
+  const STATUS={pending:'검토 대기',posted:'게시',private:'개별 답장',grievance:'고충 이관'};
+  const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+  function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),2400)}
+
+  // ----- 로그인 상태 -----
+  const KEY='bottle_admin_session';
+  let sess=null;
+  try{sess=JSON.parse(sessionStorage.getItem(KEY)||'null')}catch(e){}
+  function saveSess(s){sess=s;try{s?sessionStorage.setItem(KEY,JSON.stringify(s)):sessionStorage.removeItem(KEY)}catch(e){}}
+
+  async function auth(grant,body){
+    const r=await api.call('/auth/v1/token?grant_type='+grant,{body});
+    return {token:r.access_token,refresh:r.refresh_token,exp:Date.now()+(r.expires_in||3600)*1000-60000,email:(r.user&&r.user.email)||''};
+  }
+  async function token(){
+    if(!sess)throw new Error('로그인이 필요합니다.');
+    if(Date.now()>sess.exp){
+      try{const n=await auth('refresh_token',{refresh_token:sess.refresh});n.email=n.email||sess.email;saveSess(n)}
+      catch(e){logout('로그인이 만료되었습니다. 다시 로그인해 주세요.');throw e}
+    }
+    return sess.token;
+  }
+  async function db(path,opts={}){
+    try{return await api.call(path,Object.assign({},opts,{token:await token()}))}
+    catch(e){if(e.status===401){logout('로그인이 만료되었습니다. 다시 로그인해 주세요.')}throw e}
+  }
+
+  $('#loginBox').addEventListener('submit',async e=>{
+    e.preventDefault();
+    const b=$('#loginBtn');b.disabled=true;$('#loginMsg').textContent='';
+    try{
+      const s=await auth('password',{email:$('#email').value.trim(),password:$('#pw').value});
+      saveSess(s);
+      const ok=await api.rpc('is_admin',{},s.token);
+      if(!ok){saveSess(null);$('#loginMsg').textContent='담당자로 등록되지 않은 계정입니다.';return}
+      $('#pw').value='';enter();
+    }catch(err){
+      $('#loginMsg').textContent=/invalid/i.test(err.message)?'이메일 또는 비밀번호가 맞지 않습니다.':err.message;
+    }finally{b.disabled=false}
+  });
+  function logout(msg){
+    saveSess(null);$('#app').hidden=true;$('#loginBox').hidden=false;
+    ['#logout','#reload'].forEach(s=>$(s).hidden=true);$('#me').textContent='';
+    if(msg)$('#loginMsg').textContent=msg;
+  }
+  $('#logout').onclick=()=>logout('');
+  $('#reload').onclick=()=>load();
+  function enter(){
+    $('#loginBox').hidden=true;$('#app').hidden=false;
+    ['#logout','#reload'].forEach(s=>$(s).hidden=false);$('#me').textContent=sess.email;
+    load();
+  }
+
+  // ----- 목록 -----
+  let rows=[],filter='pending';
+  document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>{
+    document.querySelectorAll('#tabs button').forEach(x=>x.classList.remove('on'));b.classList.add('on');filter=b.dataset.f;render()});
+
+  async function load(){
+    $('#list').innerHTML='<div class="empty">불러오는 중…</div>';
+    try{rows=await db('/rest/v1/bottles?select=*&order=created_on.desc,id.desc',{method:'GET'});render()}
+    catch(err){$('#list').innerHTML=`<div class="empty">불러오지 못했습니다. ${esc(err.message)}</div>`}
+  }
+  function render(){
+    const c=s=>rows.filter(r=>r.status===s).length;
+    $('#summary').innerHTML=`<div class="sum"><b>${c('pending')}</b>검토 대기</div><div class="sum"><b>${c('posted')}</b>게시</div><div class="sum"><b>${c('private')}</b>개별 답장</div><div class="sum"><b>${c('grievance')}</b>고충 이관</div>`;
+    let list=rows;
+    if(filter==='pending')list=rows.filter(r=>r.status==='pending');
+    if(filter==='done')list=rows.filter(r=>r.status!=='pending');
+    $('#list').innerHTML=list.length?list.map(card).join(''):'<div class="empty">해당하는 편지가 없습니다.</div>';
+    document.querySelectorAll('#list .card').forEach(bind);
+  }
+  function card(d){
+    const g=d.status==='grievance';
+    return `<div class="card" data-id="${d.id}">
+      <div class="card-top"><span><b>${esc(d.code)}</b> · ${esc(d.created_on)}${d.replied_on?' · 처리 '+esc(d.replied_on):''}</span><span class="pill p-${d.status}">${STATUS[d.status]}</span></div>
+      <div class="body">${esc(d.body)}</div>
+      ${g?'':`
+      <label>답장</label>
+      <textarea class="rep" placeholder="답장을 적어 주세요.">${esc(d.reply)}</textarea>
+      <div class="selects">
+        <div><label>분류 (게시판에 표시)</label><select class="cat"><option value="">선택 안 함</option>${CATS.map(x=>`<option${d.category===x?' selected':''}>${x}</option>`).join('')}</select></div>
+        <div><label>처리 결과 (게시할 때 표시)</label><select class="res"><option value="">선택 안 함</option>
+          <option value="done"${d.result==='done'?' selected':''}>반영 완료</option>
+          <option value="plan"${d.result==='plan'?' selected':''}>반영 예정</option>
+          <option value="no"${d.result==='no'?' selected':''}>반영 어려움</option></select></div>
+      </div>`}
+      <div class="acts">
+        ${g?'':`<button class="a-post">${d.status==='posted'?'게시 내용 저장':'게시'}</button>
+        <button class="a-priv">${d.status==='private'?'답장 저장':'개별 답장'}</button>
+        <button class="a-griev">고충 이관</button>`}
+        ${d.status!=='pending'?'<button class="a-back">검토 대기로 되돌리기</button>':''}
+      </div>
+      <div class="cf"></div>
+    </div>`;
+  }
+  function bind(el){
+    const id=+el.dataset.id, d=rows.find(r=>r.id===id);
+    const val=()=>({reply:(el.querySelector('.rep')||{}).value?.trim()||'',category:(el.querySelector('.cat')||{}).value||null,result:(el.querySelector('.res')||{}).value||null});
+    const on=(s,f)=>{const b=el.querySelector(s);if(b)b.onclick=f};
+    on('.a-post',()=>{const v=val();if(!v.reply){toast('게시하려면 답장을 먼저 적어 주세요');return}
+      ask(el,'원문과 답장이 해변 게시판에 공개됩니다. 원문에 특정인을 알아볼 수 있는 내용이 없는지 확인하셨나요?','게시하기',
+        ()=>save(id,{status:'posted',reply:v.reply,category:v.category||null,result:v.result||null,replied_on:today()},'게시했습니다'))});
+    on('.a-priv',()=>{const v=val();if(!v.reply){toast('답장 내용을 적어 주세요');return}
+      save(id,{status:'private',reply:v.reply,category:v.category||null,result:null,replied_on:today()},'개별 답장을 저장했습니다')});
+    on('.a-griev',()=>ask(el,'게시판과 내 병 찾기에 답장이 표시되지 않습니다. 고충처리위원에게 원문을 전달해 주세요.','이관하기',
+        ()=>save(id,{status:'grievance',reply:null,result:null,replied_on:today()},'고충 이관으로 처리했습니다')));
+    on('.a-back',()=>save(id,{status:'pending',replied_on:null},'검토 대기로 되돌렸습니다'));
+  }
+  function ask(el,text,label,fn){
+    const box=el.querySelector('.cf');
+    box.innerHTML=`<div class="confirm">${esc(text)}<div class="acts"><button class="a-post ok">${esc(label)}</button><button class="no">취소</button></div></div>`;
+    box.querySelector('.no').onclick=()=>box.innerHTML='';
+    box.querySelector('.ok').onclick=()=>{box.innerHTML='';fn()};
+  }
+  async function save(id,patch,msg){
+    try{
+      const r=await db('/rest/v1/bottles?id=eq.'+id,{method:'PATCH',body:patch,prefer:'return=representation'});
+      if(!r||!r.length)throw new Error('저장 권한이 없습니다.');
+      const i=rows.findIndex(x=>x.id===id);rows[i]=r[0];render();toast(msg);
+    }catch(err){toast('저장하지 못했습니다. '+err.message)}
+  }
+
+  if(sess)enter();
+})();
+</script>
+</body>
+</html>
