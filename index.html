@@ -107,15 +107,23 @@ textarea,input,select{font:inherit;color:inherit}
 .stat b{display:block;font-family:'Gowun Batang',serif;font-size:clamp(14px,4vw,17px);color:#4a3212}
 .notes{padding:0 33% 10px 34.5%;margin-top:calc(130px - 25.8%);position:relative}
 .empty{text-align:center;color:#7a6142;font-size:13px;padding:30px 0}
-.entry{margin:0 0 26px;position:relative}
-.note{position:relative;background:url(img/note.webp) center/100% 100% no-repeat;padding:19% 9% 9% 8%;
+.entry{margin:0 0 26px;position:relative;container-type:inline-size}
+.pp{position:absolute;left:0;width:100%;z-index:-1;pointer-events:none;background-repeat:no-repeat}
+.note{position:relative;isolation:isolate;min-height:101.8cqw;padding:31cqw 10cqw 16cqw 8cqw;
   transform:rotate(-1.2deg);filter:drop-shadow(0 4px 6px rgba(80,55,20,.18))}
 .entry:nth-child(even) .note{transform:rotate(1deg)}
+.note .pp.t{top:0;height:58.93cqw;background:url(img/note_top.webp) 0 0/100% 100%}
+.note .pp.b{bottom:0;height:42.86cqw;background:url(img/note_bot.webp) 0 0/100% 100%}
+.note .pp.m{top:calc(58.93cqw - 3px);bottom:calc(42.86cqw - 3px);background:url(img/note_mid.webp) 0 0/100% auto repeat-y}
 .note .meta{display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:#8a6f4a;margin-bottom:6px;gap:6px}
 .tag{background:rgba(255,255,255,.6);border:1px solid #d7c19a;border-radius:10px;padding:1px 7px}
-.note p{font-family:'Gowun Batang',serif;font-size:14.5px;line-height:1.7;white-space:pre-wrap;word-break:keep-all}
-.reply{position:relative;margin:-6px 0 0 14%;background:url(img/reply.webp) center/100% 100% no-repeat;
-  padding:9% 14% 10% 8%;transform:rotate(1.4deg);filter:drop-shadow(0 4px 6px rgba(30,60,90,.18))}
+.note p{margin-top:max(4px,calc(15cqw - 22px));font-family:'Gowun Batang',serif;font-size:14.5px;line-height:1.7;white-space:pre-wrap;word-break:keep-all}
+.reply{position:relative;isolation:isolate;margin:-6px 0 0 14%;min-height:59.93cqw;
+  padding:9cqw 7cqw 11cqw 7cqw;transform:rotate(1.4deg);filter:drop-shadow(0 4px 6px rgba(30,60,90,.18))}
+.reply .pp.t{top:0;height:33.59cqw;background:url(img/reply_top.webp) 0 0/100% 100%}
+.reply .pp.b{bottom:0;height:26.34cqw;background:url(img/reply_bot.webp) 0 0/100% 100%}
+.reply .pp.m{top:calc(33.59cqw - 3px);bottom:calc(26.34cqw - 3px);background:url(img/reply_mid.webp) 0 0/100% auto repeat-y}
+.seal-space{float:right;width:22cqw;height:23cqw;margin:-4cqw -4cqw 0 4px}
 .reply .who{font-size:11.5px;color:#3f6f96;margin-bottom:4px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
 .reply p{font-family:'Gowun Batang',serif;font-size:14px;line-height:1.65;color:#2e4256;white-space:pre-wrap;word-break:keep-all}
 .badge{font-size:11px;padding:1px 7px;border-radius:9px;color:#fff;white-space:nowrap}
@@ -355,9 +363,9 @@ textarea,input,select{font:inherit;color:inherit}
   function entryHTML(d){
     const r=RESULT[d.result];
     return `<div class="entry">
-      <div class="note"><div class="meta">${d.category?`<span class="tag">${esc(d.category)}</span>`:'<span></span>'}<span>${esc(d.created_on)}</span></div>
+      <div class="note"><i class="pp t"></i><i class="pp m"></i><i class="pp b"></i><div class="meta">${d.category?`<span class="tag">${esc(d.category)}</span>`:'<span></span>'}<span>${esc(d.created_on)}</span></div>
         <p>${esc(d.body)}</p></div>
-      ${d.reply?`<div class="reply"><div class="who">회사 답장 ${r?`<span class="badge ${r[1]}">${r[0]}</span>`:''}</div><p>${esc(d.reply)}</p></div>`:''}
+      ${d.reply?`<div class="reply"><i class="pp t"></i><i class="pp m"></i><i class="pp b"></i><span class="seal-space"></span><div class="who">회사 답장 ${r?`<span class="badge ${r[1]}">${r[0]}</span>`:''}</div><p>${esc(d.reply)}</p></div>`:''}
     </div>`;
   }
   async function loadBoard(){
