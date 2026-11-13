@@ -92,13 +92,10 @@ textarea,input,select{font:inherit;color:inherit}
   padding:7px 12px;border-radius:14px}
 
 /* ---------- board ---------- */
-#board{background:url(img/sea.webp) center/cover fixed;padding-bottom:0}
-#board{position:relative}
-#board::before{content:"";position:fixed;inset:0;background:inherit;filter:blur(3px) brightness(1.05) saturate(.85);transform:scale(1.03);z-index:0}
-.board{position:relative;z-index:1;width:100%;max-width:520px;margin:0 auto;
-  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 3%,#000 97%,transparent 100%);
-  mask-image:linear-gradient(90deg,transparent 0,#000 3%,#000 97%,transparent 100%);
-  background:url(img/board_mid.webp) 0 0/100% auto repeat-y}
+#board{position:relative;padding-bottom:4vh}
+#board::before{content:"";position:fixed;inset:0;background:#cfe3f3 url(img/beach.webp) center bottom/cover no-repeat;z-index:0}
+.board{position:relative;z-index:1;width:100%;max-width:560px;margin:0 auto}
+.mid-wrap{display:flow-root;background:url(img/board_mid.webp) 0 0/100% auto repeat-y}
 .board-top,.board-bot{display:block;width:100%;height:auto}
 .board-top-wrap{position:relative}
 .board-head{position:absolute;left:19%;right:15.5%;top:46%;text-align:center}
@@ -124,7 +121,7 @@ textarea,input,select{font:inherit;color:inherit}
 .badge{font-size:11px;padding:1px 7px;border-radius:9px;color:#fff;white-space:nowrap}
 .b-done{background:#4b8a5f}.b-plan{background:#2f6f9f}.b-no{background:#9a7b5c}.b-wait{background:#b08a3a}
 .board-foot{position:relative}
-.foot-note{position:absolute;left:14%;right:14%;bottom:5%;text-align:center;font-size:12px;line-height:1.55;color:#5b4528;background:rgba(255,250,238,.82);border-radius:10px;padding:8px 10px}
+.foot-note{position:absolute;left:17%;right:17%;top:44%;text-align:center;font-size:12px;line-height:1.55;color:#5b4528;background:rgba(255,250,238,.82);border-radius:10px;padding:8px 10px}
 
 /* ---------- find ---------- */
 #find{background:url(img/sea.webp) center/cover fixed;padding:80px 16px 40px}
@@ -226,7 +223,7 @@ textarea,input,select{font:inherit;color:inherit}
         <div class="stats" id="stats"></div>
       </div>
     </div>
-    <div class="notes" id="notes"><div class="loading">불러오는 중…</div></div>
+    <div class="mid-wrap"><div class="notes" id="notes"><div class="loading">불러오는 중…</div></div></div>
     <div class="board-foot">
       <img class="board-bot" src="img/board_bot.webp" alt="">
       <div class="foot-note">해변에 닿지 않은 병은 담당자가 보낸 분께 따로 답장합니다.<br>'내 병 찾기'에서 확인하세요.</div>
