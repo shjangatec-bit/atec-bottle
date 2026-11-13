@@ -49,7 +49,7 @@ textarea,input,select{font:inherit;color:inherit}
 .letter{width:100%;max-width:520px;background:rgba(253,250,242,.93);border-radius:6px;padding:22px 20px 18px;
   box-shadow:0 10px 30px rgba(90,60,20,.18),0 1px 0 rgba(255,255,255,.8) inset;
   background-image:repeating-linear-gradient(transparent 0 33px,rgba(120,150,180,.16) 33px 34px);
-  transform-origin:50% 100%;transition:transform .7s cubic-bezier(.6,0,.4,1),opacity .7s}
+  transform-origin:50% 50%}
 .letter h1{font-family:'Gowun Batang',serif;font-size:21px;margin-bottom:4px}
 .letter .sub{font-size:13px;color:var(--ink-soft);margin-bottom:14px;line-height:1.55}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
@@ -68,24 +68,16 @@ textarea,input,select{font:inherit;color:inherit}
 .err{color:#b03a2e;font-size:12.5px;margin-top:8px;min-height:1em}
 
 /* ---------- send animation ---------- */
-#send{position:fixed;inset:0;z-index:60;background:url(img/sea.webp) center/cover no-repeat;overflow:hidden}
-#send::after{content:"";position:absolute;inset:auto 0 0 0;height:30%;background:linear-gradient(transparent,rgba(255,255,255,.15))}
-.bottle{position:absolute;left:50%;bottom:6%;width:min(26vw,120px);transform:translateX(-50%);opacity:0;z-index:2;
-  filter:drop-shadow(0 8px 10px rgba(20,60,90,.25))}
-.bottle img{width:100%;display:block}
-.bottle.in{animation:bottleIn 1s ease-out forwards}
-.bottle.go{animation:bottleGo 4.2s cubic-bezier(.35,.1,.3,1) forwards}
-.bottle .bob{animation:bob 1.6s ease-in-out infinite}
-@keyframes bottleIn{from{opacity:0;transform:translateX(-50%) translateY(40px) rotate(-8deg)}to{opacity:1;transform:translateX(-50%) translateY(0) rotate(0)}}
-@keyframes bottleGo{
-  0%{opacity:1;transform:translateX(-50%) translateY(0) scale(1) rotate(0)}
-  30%{transform:translateX(-46%) translateY(-14vh) scale(.62) rotate(70deg)}
-  100%{opacity:0;transform:translateX(-30%) translateY(-46vh) scale(.12) rotate(80deg)}}
-@keyframes bob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-6px) rotate(4deg)}}
-.ripple{position:absolute;left:50%;bottom:7%;width:160px;height:26px;margin-left:-80px;border-radius:50%;
-  border:2px solid rgba(255,255,255,.7);opacity:0;z-index:1}
-.ripple.on{animation:ripple 1.4s ease-out 2}
-@keyframes ripple{from{opacity:.9;transform:scale(.3)}to{opacity:0;transform:scale(1.5)}}
+#send{position:fixed;inset:0;z-index:60;overflow:hidden;pointer-events:none}
+#send.active{pointer-events:auto}
+.sea-bg{position:absolute;inset:0;background:url(img/sea.webp) center 55%/cover no-repeat;opacity:0;will-change:opacity,transform}
+.sea-bg::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(255,255,255,.18),transparent 60%)}
+.drift{position:absolute;left:0;top:0;width:min(24vw,110px);opacity:0;z-index:2;will-change:transform,opacity}
+.tilt{transform-origin:50% 55%}
+.bob img{width:100%;display:block;filter:drop-shadow(0 6px 8px rgba(20,60,90,.25))}
+.bob.on{animation:bob 2.4s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-6px) rotate(5deg)}}
+.ring{position:absolute;left:0;top:0;border-radius:50%;border:2px solid rgba(255,255,255,.8);pointer-events:none;z-index:1}
 .send-msg{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(88vw,380px);z-index:3;
   background:rgba(253,250,242,.95);border-radius:12px;padding:24px 22px;text-align:center;
   box-shadow:0 12px 34px rgba(20,60,90,.25);opacity:0;pointer-events:none;transition:opacity .6s}
@@ -209,8 +201,8 @@ textarea,input,select{font:inherit;color:inherit}
 </section>
 
 <div id="send" class="hidden" aria-live="polite">
-  <div class="ripple" id="ripple"></div>
-  <div class="bottle" id="bottle"><div class="bob"><img src="img/bottle.webp" alt="편지가 담긴 유리병"></div></div>
+  <div class="sea-bg" id="seaBg"></div>
+  <div class="drift" id="drift"><div class="tilt" id="tilt"><div class="bob" id="bob"><img src="img/bottle.webp" alt="편지가 담긴 유리병"></div></div></div>
   <div class="send-msg" id="sendMsg">
     <h2>유리병이 바다로 떠났어요</h2>
     <p>아래 병 번호를 적어 두세요.<br>이 번호로 처리 상태와 답장을 확인할 수 있습니다.</p>
@@ -296,30 +288,74 @@ textarea,input,select{font:inherit;color:inherit}
   });
 
   // 띄우기 연출
-  let timers=[];
-  function clearT(){timers.forEach(clearTimeout);timers=[]}
-  function launch(code){
-    const L=$('#letter');
-    L.style.transform='scale(.15,.04) translateY(200px)';L.style.opacity='0';
-    const S=$('#send'),B=$('#bottle'),R=$('#ripple'),M=$('#sendMsg');
-    $('#bno').textContent=code;
-    timers.push(setTimeout(()=>{S.classList.remove('hidden');B.className='bottle';M.classList.remove('on');R.classList.remove('on');void B.offsetWidth;B.classList.add('in')},650));
-    timers.push(setTimeout(()=>{B.classList.remove('in');B.classList.add('go');R.classList.add('on')},2000));
-    timers.push(setTimeout(finish,6000));
+  let timers=[],anims=[],ringT=null;
+  const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function clearAll(){
+    timers.forEach(clearTimeout);timers=[];clearInterval(ringT);ringT=null;
   }
-  function finish(){clearT();const B=$('#bottle');B.className='bottle';B.style.opacity='0';$('#sendMsg').classList.add('on');$('#skip').classList.add('hidden')}
+  function launch(code){
+    const L=$('#letter'),S=$('#send'),sea=$('#seaBg'),D=$('#drift'),T=$('#tilt'),Bb=$('#bob'),M=$('#sendMsg');
+    $('#bno').textContent=code;
+    M.classList.remove('on');$('#skip').classList.remove('hidden');
+    const r=L.getBoundingClientRect(),vw=innerWidth,vh=innerHeight;
+    S.classList.remove('hidden');S.classList.add('active');
+    if(reduce){sea.style.opacity=1;finish();return}
+    const bw=D.offsetWidth,bh=D.offsetHeight;
+    const P=(x,y,s)=>`translate(${(x-bw/2).toFixed(1)}px,${(y-bh/2).toFixed(1)}px) scale(${s})`;
+    const cx=vw/2,startY=Math.min(r.top+r.height*0.45,vh*0.6),waterY=vh*0.74,horizonY=vh*0.51;
+    const go=(el,k,o)=>{const a=el.animate(k,Object.assign({fill:'forwards'},o));anims.push(a);return a};
+    // 1) 편지지가 말려 들어가고 유리병이 나타남
+    go(L,[{transform:'none',opacity:1},{transform:'translateY(10px) scale(.14,.035)',opacity:0}],{duration:850,easing:'cubic-bezier(.6,0,.4,1)'});
+    go(D,[{transform:P(cx,startY,.55),opacity:0},{transform:P(cx,startY,1),opacity:1}],{duration:600,delay:450,easing:'cubic-bezier(.2,.8,.3,1)'});
+    // 2) 책상에서 바다로 천천히 넘어감
+    go(sea,[{opacity:0,transform:'scale(1.1)'},{opacity:1,transform:'scale(1)'}],{duration:1600,delay:1000,easing:'cubic-bezier(.4,0,.2,1)'});
+    go(D,[{transform:P(cx,startY,1)},{transform:P(cx,waterY,.92)}],{duration:1300,delay:1300,easing:'cubic-bezier(.45,0,.3,1)'});
+    // 3) 물에 닿아 눕고, 살짝 잠겼다 떠오름
+    go(T,[{transform:'rotate(0deg)'},{transform:'rotate(74deg)'}],{duration:900,delay:2500,easing:'cubic-bezier(.3,1.3,.5,1)'});
+    go(D,[{transform:P(cx,waterY,.92)},{transform:P(cx,waterY+14,.92),offset:.4},{transform:P(cx,waterY,.92)}],{duration:900,delay:2600,easing:'ease-out'});
+    timers.push(setTimeout(()=>{ring(1.6);Bb.classList.add('on')},2650));
+    // 4) 물결을 타고 수평선 쪽으로 멀어짐
+    go(D,[
+      {transform:P(cx,waterY,.92),opacity:1},
+      {transform:P(cx+vw*.025,vh*.66,.6),opacity:1,offset:.3},
+      {transform:P(cx+vw*.05,vh*.57,.3),opacity:1,offset:.7},
+      {transform:P(cx+vw*.06,horizonY,.12),opacity:0}
+    ],{duration:5600,delay:3500,easing:'cubic-bezier(.25,.4,.35,1)'});
+    timers.push(setTimeout(()=>{ringT=setInterval(()=>ring(1),1100)},3600));
+    timers.push(setTimeout(finish,8700));
+  }
+  function ring(k){
+    const D=$('#drift'),S=$('#send'),b=D.getBoundingClientRect();
+    if(!b.width||getComputedStyle(D).opacity<.15)return;
+    const w=Math.max(b.width,b.height)*1.25*k,h=w*.2,el=document.createElement('div');
+    el.className='ring';el.style.width=w+'px';el.style.height=h+'px';
+    el.style.left=(b.left+b.width/2-w/2)+'px';el.style.top=(b.top+b.height*.62-h/2)+'px';
+    S.appendChild(el);
+    el.animate([{opacity:.85,transform:'scale(.35)'},{opacity:0,transform:'scale(1.35)'}],{duration:1700,easing:'ease-out'}).onfinish=()=>el.remove();
+  }
+  function finish(){
+    clearAll();
+    $('#seaBg').getAnimations().forEach(a=>a.finish());
+    $('#seaBg').style.opacity=1;
+    const D=$('#drift');D.getAnimations().forEach(a=>a.cancel());D.style.opacity=0;
+    $('#bob').classList.remove('on');
+    $('#sendMsg').classList.add('on');$('#skip').classList.add('hidden');
+  }
   $('#skip').onclick=finish;
   function closeSend(){
-    $('#send').classList.add('hidden');$('#skip').classList.remove('hidden');$('#bottle').style.opacity='';
-    const L=$('#letter');L.style.transition='none';L.style.transform='';L.style.opacity='';
+    clearAll();
+    anims.forEach(a=>a.cancel());anims=[];
+    const S=$('#send');S.classList.add('hidden');S.classList.remove('active');
+    S.querySelectorAll('.ring').forEach(e=>e.remove());
+    $('#seaBg').style.opacity='';$('#drift').style.opacity='';$('#bob').classList.remove('on');
+    $('#sendMsg').classList.remove('on');$('#skip').classList.remove('hidden');
     txt.value='';$('#cnt').textContent='0';btn.disabled=true;
-    requestAnimationFrame(()=>L.style.transition='');
   }
-  $('#toBoard').onclick=()=>{closeSend();show('board')};
   $('#copyBno').onclick=async()=>{
     try{await navigator.clipboard.writeText($('#bno').textContent);toast('병 번호를 복사했습니다')}
     catch(e){toast('복사가 안 되면 번호를 직접 적어 두세요')}
   };
+  $('#toBoard').onclick=()=>{closeSend();show('board')};
 
   // 게시판
   function entryHTML(d){
