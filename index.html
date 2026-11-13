@@ -92,23 +92,20 @@ textarea,input,select{font:inherit;color:inherit}
   padding:7px 12px;border-radius:14px}
 
 /* ---------- board ---------- */
-#board{background:url(img/sea.webp) center/cover fixed;padding-bottom:0}
-#board{position:relative}
-#board::before{content:"";position:fixed;inset:0;background:inherit;filter:blur(3px) brightness(1.05) saturate(.85);transform:scale(1.03);z-index:0}
-.board{position:relative;z-index:1;width:100%;max-width:520px;margin:0 auto;
-  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 3%,#000 97%,transparent 100%);
-  mask-image:linear-gradient(90deg,transparent 0,#000 3%,#000 97%,transparent 100%);
-  background:url(img/board_mid.webp) 0 0/100% auto repeat-y}
+#board{position:relative;overflow-x:hidden;padding-bottom:0;
+  --B:max(min(560px,84vw),40.7vw);--W:calc(var(--B) / 0.407);background:#bfe0f2}
+.board{position:relative;width:var(--W);max-width:none;margin:0 0 0 calc(50% - var(--W) / 2)}
+.mid-wrap{display:flow-root;background:url(img/board_mid.webp) 0 0/100% auto repeat-y}
 .board-top,.board-bot{display:block;width:100%;height:auto}
 .board-top-wrap{position:relative}
-.board-head{position:absolute;left:19%;right:15.5%;top:46%;text-align:center}
+.board-head{position:absolute;left:34%;right:32.5%;top:45%;text-align:center}
 .board-head h2{font-family:'Gowun Batang',serif;font-size:clamp(18px,5vw,24px);color:#5a3d1c;
   text-shadow:0 1px 0 rgba(255,255,255,.6)}
 .board-head p{font-size:12px;color:#7a6142;margin-top:4px;line-height:1.5}
 .stats{display:flex;justify-content:center;gap:4px;margin-top:8px}
 .stat{flex:1;max-width:76px;background:rgba(255,251,240,.88);border:1px dashed #b89a6c;border-radius:6px;padding:4px 2px;font-size:clamp(10px,2.6vw,11.5px);color:#6b4f2a;line-height:1.3;white-space:nowrap}
 .stat b{display:block;font-family:'Gowun Batang',serif;font-size:clamp(14px,4vw,17px);color:#4a3212}
-.notes{padding:4% 15.5% 10px 19%;margin-top:-13%;position:relative}
+.notes{padding:0 33% 10px 34.5%;margin-top:calc(130px - 25.8%);position:relative}
 .empty{text-align:center;color:#7a6142;font-size:13px;padding:30px 0}
 .entry{margin:0 0 26px;position:relative}
 .note{position:relative;background:url(img/note.webp) center/100% 100% no-repeat;padding:19% 9% 9% 8%;
@@ -124,7 +121,7 @@ textarea,input,select{font:inherit;color:inherit}
 .badge{font-size:11px;padding:1px 7px;border-radius:9px;color:#fff;white-space:nowrap}
 .b-done{background:#4b8a5f}.b-plan{background:#2f6f9f}.b-no{background:#9a7b5c}.b-wait{background:#b08a3a}
 .board-foot{position:relative}
-.foot-note{position:absolute;left:14%;right:14%;bottom:5%;text-align:center;font-size:12px;line-height:1.55;color:#5b4528;background:rgba(255,250,238,.82);border-radius:10px;padding:8px 10px}
+.foot-note{position:absolute;left:34.5%;right:33%;top:34%;text-align:center;font-size:12px;line-height:1.55;color:#5b4528;background:rgba(255,250,238,.82);border-radius:10px;padding:8px 10px}
 
 /* ---------- find ---------- */
 #find{background:url(img/sea.webp) center/cover fixed;padding:80px 16px 40px}
@@ -226,7 +223,7 @@ textarea,input,select{font:inherit;color:inherit}
         <div class="stats" id="stats"></div>
       </div>
     </div>
-    <div class="notes" id="notes"><div class="loading">불러오는 중…</div></div>
+    <div class="mid-wrap"><div class="notes" id="notes"><div class="loading">불러오는 중…</div></div></div>
     <div class="board-foot">
       <img class="board-bot" src="img/board_bot.webp" alt="">
       <div class="foot-note">해변에 닿지 않은 병은 담당자가 보낸 분께 따로 답장합니다.<br>'내 병 찾기'에서 확인하세요.</div>
